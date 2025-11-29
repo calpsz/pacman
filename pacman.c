@@ -10,10 +10,16 @@ int acabou(){
     return 0;
 }
 
+int ehdirecaovalida(char direcao){
+    return direcao == CIMA || direcao == BAIXO || direcao == DIREITA || direcao == ESQUERDA;
+}
+
 void move(char direcao) {
 
     // eh possivel matar funcao do tipo void com return
-    if(direcao != 'a' && direcao != 'd' && direcao != 'w' && direcao != 's') return;
+    // verifica se a direcao digitada eh valida
+    if(!ehdirecaovalida(direcao)) 
+        return;
 
     // analisa se eh uma posicao valida
     int proximox = heroi.x;
@@ -22,38 +28,38 @@ void move(char direcao) {
     // direcao usando padrao wasd
     // pegando a info de onde o heroi vai anadar
     switch (direcao){
-        case 'a':
+        case ESQUERDA:
             proximoy--;
             break;
 
-        case 'd':
+        case DIREITA:
             proximoy++;
             break;
 
-        case 'w':
+        case CIMA:
             proximox--;
             break;
         
-        case 's':
+        case BAIXO:
             proximox++;
             break;
     }
 
-    if(proximox >= m.linhas) return;
-    if(proximoy >= m.colunas) return;
-    if(m.matriz[proximox][proximoy] != '.') return;
+    if(!ehvalida(&m, proximox, proximoy)) 
+        return;
 
-    m.matriz[proximox][proximoy] = '@';
-    m.matriz[heroi.x][heroi.y] = '.';
+    if(!ehvazia(&m, proximox, proximoy)) 
+        return;
+    
+    andanomapa(&m, heroi.x, heroi.y, proximox, proximoy);
     heroi.x = proximox;
     heroi.y = proximoy;
-    
 }
 
 int main(){
 
     lemapa(&m);
-    encontrachar(&m, &heroi, '@');
+    encontrachar(&m, &heroi, HEROI);
 
     do{
         imprimemapa(&m);
