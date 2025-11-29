@@ -8,6 +8,7 @@ MAPA m;
 POSICAO heroi;
 
 int destinofantasma(int xatul, int yatual, int* xdestino, int* ydestino){
+    
     int opcoes[4][2] = {
         { xatul  , yatual+1 },
         { xatul+1, yatual   },
@@ -19,7 +20,7 @@ int destinofantasma(int xatul, int yatual, int* xdestino, int* ydestino){
     for(int i = 0; i < 10; i++){
         int posicao = rand() % 4;
 
-        if(podeandar(&m, opcoes[posicao][0], opcoes[posicao][1])){
+        if(podeandar(&m, FANTASMA, opcoes[posicao][0], opcoes[posicao][1])){
             *xdestino = opcoes[posicao][0];
             *ydestino = opcoes[posicao][1];
 
@@ -35,21 +36,21 @@ void fantasmas(){
 
     copiamapa(&copia, &m);
 
-    for (int i = 0; i < copia.linhas; i++){
-        for(int j = 0; j < copia.colunas; i++){
+    for(int i = 0; i < copia.linhas; i++) {
+		for(int j = 0; j < copia.colunas; j++) {
+			if(copia.matriz[i][j] == FANTASMA) {
 
-            if(copia.matriz[i][j] == FANTASMA){
-                int xdestino;
-                int ydestino;
+				int xdestino;
+				int ydestino;
 
-                int encontrou = destinofantasma(i, j, &xdestino, &ydestino);
+				int encontrou = destinofantasma(i, j, &xdestino, &ydestino);
 
-                if(encontrou) {
-                    andanomapa(&m, i, j, xdestino, ydestino);
-                }
-            }
-        }
-    }
+				if(encontrou) {
+					andanomapa(&m, i, j, xdestino, ydestino);
+				}
+			}
+		}
+	}
 
     liberamapa(&copia);
     
@@ -68,7 +69,6 @@ int ehdirecaovalida(char direcao){
 }
 
 void move(char direcao) {
-
     // eh possivel matar funcao do tipo void com return
     // verifica se a direcao digitada eh valida
     if(!ehdirecaovalida(direcao)) 
@@ -98,7 +98,7 @@ void move(char direcao) {
             break;
     }
 
-    if(!podeandar(&m, proximox, proximoy)) 
+    if(!podeandar(&m, HEROI, proximox, proximoy)) 
         return;
     
     andanomapa(&m, heroi.x, heroi.y, proximox, proximoy);

@@ -6,8 +6,16 @@
 // m->matriz eh igual a (*m).matriz
 // estamos acessando o struct MAPA m atraves de seu ponteiro
 
-int podeandar(MAPA* m, int x, int y){
-    return ehvalida(m, x, y) && ehvazia(m, x, y);
+int ehparede(MAPA* m, int x, int y){
+    return m->matriz[x][y] == PAREDE_VERTICAL || m->matriz[x][y] == PAREDE_HORIZONTAL;
+}
+
+int ehpersonagem(MAPA* m, char personagem, int x, int y){
+    return m->matriz[x][y] == personagem;
+}
+
+int podeandar(MAPA* m, char personagem, int x, int y){
+    return ehvalida(m, x, y) && !ehparede(m, x, y) && !ehpersonagem(m, personagem, x, y);
 }
 
 void copiamapa(MAPA* destino, MAPA* origem){
@@ -91,6 +99,7 @@ int ehvazia(MAPA* m, int x, int y){
 }
 
 void andanomapa(MAPA* m, int xorigem, int yorigem, int xdestino, int ydestino){
+
     char personagem = m->matriz[xorigem][yorigem];
 
     m->matriz[xdestino][ydestino] = personagem;
