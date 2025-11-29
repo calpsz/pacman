@@ -1,13 +1,66 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "pacman.h"
 #include "mapa.h"
 
 MAPA m;
 POSICAO heroi;
 
-int acabou(){
+int destinofantasma(int xatul, int yatual, int* xdestino, int* ydestino){
+    int opcoes[4][2] = {
+        { xatul  , yatual+1 },
+        { xatul+1, yatual   },
+        { xatul  , yatual-1 },
+        { xatul-1, yatual   }
+    };
+
+    srand(time(0));
+    for(int i = 0; i < 10; i++){
+        int posicao = rand() % 4;
+
+        if(podeandar(&m, opcoes[posicao][0], opcoes[posicao][1])){
+            *xdestino = opcoes[posicao][0];
+            *ydestino = opcoes[posicao][1];
+
+            return 1;
+        }
+    }
+
     return 0;
+}
+
+void fantasmas(){
+    MAPA copia;
+
+    copiamapa(&copia, &m);
+
+    for (int i = 0; i < copia.linhas; i++){
+        for(int j = 0; j < copia.colunas; i++){
+
+            if(copia.matriz[i][j] == FANTASMA){
+                int xdestino;
+                int ydestino;
+
+                int encontrou = destinofantasma(i, j, &xdestino, &ydestino);
+
+                if(encontrou) {
+                    andanomapa(&m, i, j, xdestino, ydestino);
+                }
+            }
+        }
+    }
+
+    liberamapa(&copia);
+    
+}
+
+int acabou(){
+    POSICAO pos;
+    int pacmannomapa = encontrachar(&m, &pos, HEROI);
+
+    // se o pacman n tiver no mapa, o jogo acaba
+    return !pacmannomapa;
 }
 
 int ehdirecaovalida(char direcao){
@@ -27,7 +80,7 @@ void move(char direcao) {
 
     // direcao usando padrao wasd
     // pegando a info de onde o heroi vai anadar
-    switch (direcao){
+    switch(direcao){
         case ESQUERDA:
             proximoy--;
             break;
@@ -45,10 +98,7 @@ void move(char direcao) {
             break;
     }
 
-    if(!ehvalida(&m, proximox, proximoy)) 
-        return;
-
-    if(!ehvazia(&m, proximox, proximoy)) 
+    if(!podeandar(&m, proximox, proximoy)) 
         return;
     
     andanomapa(&m, heroi.x, heroi.y, proximox, proximoy);
@@ -68,6 +118,7 @@ int main(){
         scanf(" %c", &comando);
 
         move(comando);
+        fantasmas();
 
     } while (!acabou());
     

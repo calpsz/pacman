@@ -1,4 +1,5 @@
 #define HEROI '@'
+#define FANTASMA 'F'
 #define VAZIO '.'
 #define PAREDE_VERTICAL '|'
 #define PAREDE_HORIZONTAL '-'
@@ -17,11 +18,16 @@ struct posicao{
 typedef struct posicao POSICAO;
 
 
-void liberamapa(MAPA* m);
-void lemapa(MAPA* m);
 void alocamapa(MAPA* m);
+void lemapa(MAPA* m);
+void liberamapa(MAPA* m);
 void imprimemapa(MAPA* m);
-void encontrachar(MAPA* m, POSICAO* p, char c);
+
+int encontrachar(MAPA* m, POSICAO* p, char c);
+
+int podeandar(MAPA* m, int x, int y);
 void andanomapa(MAPA* m, int xorigem, int yorigem, int xdestino, int ydestino);
+void copiamapa(MAPA* destino, MAPA* origem);
+
 int ehvalida(MAPA* m, int x, int y);
 int ehvazia(MAPA* m, int x, int y);
