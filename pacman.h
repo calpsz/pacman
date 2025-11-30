@@ -1,3 +1,6 @@
+#ifndef _PACMAN_H_
+#define _PACMAN_H_
+
 #define CIMA 'w'
 #define BAIXO 's'
 #define DIREITA 'd'
@@ -15,3 +18,4 @@ void fantasmas();
 void explodepilula();
 void explodepilula2(int x, int y, int somax, int somay, int qntd);
 
+#endif
