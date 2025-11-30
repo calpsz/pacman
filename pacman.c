@@ -111,18 +111,15 @@ void move(char direcao) {
     heroi.y = proximoy;
 }
 
-void explodepilula(){
-    // analisa 3 posicoes pra direita
-    for(int i = 1; i <= 3; i++){
-        if(ehvalida(&m, heroi.x, heroi.y+i)){
+void explodepilula(int x, int y, int qntd){
+   
+    if(qntd == 0) return;
+    if(!ehvalida(&m, x, y+1)) return;
+    if(ehparede(&m, x, y+1)) return;
 
-            if(ehparede(&m, heroi.x, heroi.y+i)){
-                break;
-            }
-        
-            m.matriz[heroi.x][heroi.y+i] = VAZIO;
-        }
-    }
+    m.matriz[x][y+1] = VAZIO;
+    explodepilula(x, y+1, qntd - 1);
+
 }
 
 int main(){
@@ -137,7 +134,7 @@ int main(){
         char comando;
         scanf(" %c", &comando);
         move(comando);
-        if(comando == BOMBA) explodepilula();
+        if(comando == BOMBA) explodepilula(heroi.x, heroi.y, 3);
 
         fantasmas();
 

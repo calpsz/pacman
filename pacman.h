@@ -12,5 +12,5 @@ int ehdirecaovalida(char direcao);
 int destinofantasma(int xatul, int yatual, int* xdestino, int* ydestino);
 void fantasmas();
 
-void explodepilula();
+void explodepilula(int x, int y, int qntd);
 
